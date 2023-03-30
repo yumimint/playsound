@@ -50,23 +50,18 @@ if system == 'Windows':
 
         @classmethod
         def play(cls, sound, block=True):
-            sound = _canonicalizePath(sound)
-
-            alias = str(cls.alias_id)
+            alias = cls.alias_id
             cls.alias_id += 1
 
-            try:
-                mci_send_string('open "{}" alias {}', sound, alias)
-            except mciError:
-                raise PlaysoundException('could not open {}'.format(sound))
+            mci_send_string('open "{}" alias {}', sound, alias)
 
             if block:
                 mci_send_string('play {} wait', alias)
                 mci_send_string('close {}', alias)
             else:
+                mci_send_string('play {}', alias)
                 mci_send_string('set {} time format milliseconds', alias)
                 duration = mci_send_string('status {} length', alias) / 1000
-                mci_send_string('play {}', alias)
                 expiry = time() + duration
                 cls.opend.add((expiry, alias))
 
