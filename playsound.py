@@ -243,8 +243,6 @@ def _playsoundAnotherPython(otherPython, sound, block=True, macOS=False):
         t.join()
 
 
-system = system()
-
 if system == 'Windows':
     playsound = PlaysoundWin.play
 elif system == 'Darwin':
